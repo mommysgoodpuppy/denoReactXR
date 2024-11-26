@@ -1,0 +1,36 @@
+{
+  "tasks": {
+    "dev": "deno task vite & deno task httpsproxy",
+    "vite": "deno run -A --node-modules-dir npm:vite --host",
+    "httpsproxy": "deno run -A server.ts",
+    "build": "deno run -A --node-modules-dir npm:vite build",
+    "preview": "deno run -A --node-modules-dir npm:vite preview",
+    "serve": "deno run --allow-net --allow-read jsr:@std/http@1/file-server dist/"
+  },
+  "compilerOptions": {
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "jsxImportSourceTypes": "@types/react"
+  },
+  "imports": {
+    "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.0",
+    "@types/react": "npm:@types/react@^18.3.11",
+    "@types/react-dom": "npm:@types/react-dom@^18.3.1",
+    "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^4.3.3",
+    "react": "npm:react@^18.3.1",
+    "react-dom": "npm:react-dom@^18.3.1",
+    "vite": "npm:vite@^5.4.9",
+
+
+    "@react-three/cannon": "npm:@react-three/cannon",
+    "@react-three/drei": "npm:@react-three/drei",
+    "@react-three/fiber": "npm:@react-three/fiber",
+    "@react-three/xr": "npm:@react-three/xr",
+    "three": "npm:three"
+  }
+}
