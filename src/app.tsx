@@ -7,7 +7,10 @@ import { Button } from "@react-three/uikit-apfel";
 import { PlayIcon, SkipBack, SkipForward, Menu, Maximize, Settings } from '@react-three/uikit-lucide';
 import { useState } from 'react';
 import { useControls } from 'leva';
+import { Physics } from '@react-three/cannon'; // Import Physics
 import { Environment } from '@react-three/drei';
+import DraggableFrame from './DraggableFrame.jsx'; 
+import { Cursor } from './helpers/Cursor.jsx'; // Ensure Cursor is imported
 
 const store = createXRStore({
   hand: {
@@ -27,7 +30,7 @@ function MusicPlayer() {
         <Container flexDirection="column" gap={16}>
           {/* Header */}
           <Container flexDirection="row" justifyContent="space-between" alignItems="center">
-            <Text fontSize={18} fontWeight={500}>Music Player</Text>
+            <Text fontSize={16} fontWeight={500}>Music Player</Text>
             <Container flexDirection="row" gap={8}>
               <Button variant="icon" size="xs">
                 <Maximize />
@@ -50,8 +53,8 @@ function MusicPlayer() {
               borderRadius={8}
             />
             <Container flexDirection="column" gap={4}>
-              <Text fontSize={18} fontWeight={500}>Blowin' in the Wind</Text>
-              <Text fontSize={14} color="rgb(107,114,128)">
+              <Text fontSize={16} fontWeight={500}>Blowin' in the Wind</Text>
+              <Text fontSize={11} color="rgb(107,114,128)">
                 Bob Dylan {counter}
               </Text>
             </Container>
@@ -76,7 +79,7 @@ function MusicPlayer() {
 
           {/* Playlist */}
           <Container flexDirection="column" gap={8}>
-            <Text fontSize={18} fontWeight={500}>Playlist</Text>
+            <Text fontSize={16} fontWeight={500}>Playlist</Text>
             {[
               "Like a Rolling Stone",
               "The Times They Are a-Changin'",
@@ -88,7 +91,7 @@ function MusicPlayer() {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Text fontSize={14}>{song}</Text>
+                <Text fontSize={11}>{song}</Text>
                 <Button variant="icon" size="xs">
                   <PlayIcon />
                 </Button>
@@ -112,26 +115,36 @@ export function App() {
         <XR store={store}>
           <XROrigin visible={visible} />
           <Environment preset="city" />
-          <group pointerEventsType={{ deny: 'grab' }} position={[0, 1.5, -0.5]}>
-            <Root
-              overflow="scroll"
-              scrollbarColor="black"
-              flexDirection="column"
-              gap={32}
-              paddingX={32}
-              alignItems="center"
-              padding={32}
-              pixelSize={0.0005}
-            >
-              <ambientLight intensity={0.5} />
-              <directionalLight intensity={1} position={[-5, 5, 10]} />
-              <Container>
-                <Defaults>
-                  <MusicPlayer />
-                </Defaults>
-              </Container>
-            </Root>
-          </group>
+
+          {/* Physics Context with Zero Gravity for Floating */}
+          <Physics gravity={[0, 0, 0]}>
+            <group pointerEventsType={{ deny: 'grab' }} position={[0, 1.5, -0.5]}>
+              <Root
+                overflow="scroll"
+                scrollbarColor="black"
+                flexDirection="column"
+                gap={32}
+                paddingX={32}
+                alignItems="center"
+                padding={32}
+                pixelSize={0.0005}
+              >
+                <ambientLight intensity={0.5} />
+                <directionalLight intensity={1} position={[-5, 5, 10]} />
+
+                {/* DraggableFrame with Floating Configuration */}
+                <DraggableFrame>
+                  <Defaults>
+                    <MusicPlayer />
+                  </Defaults>
+                </DraggableFrame>
+              </Root>
+            </group>
+
+            {/* Cursor for Dragging */}
+            <Cursor />
+          </Physics>
+
         </XR>
       </Canvas>
     </>
